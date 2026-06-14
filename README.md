@@ -4,7 +4,7 @@ Public Model Context Protocol server for the TrailWeights ultralight gear
 corpus. Lets ChatGPT, Claude, Apple Intelligence, Copilot, Gemini, and any
 MCP-compliant client search 5,000+ products, 40,000+ creator transcript
 chunks, and 21 in-house pack templates with verified weights and
-cottage-first affiliate URLs.
+curated retailer buy links.
 
 ## Transport
 
@@ -20,10 +20,10 @@ Rate-limit headers (`x-ratelimit-limit`, `x-ratelimit-remaining`,
 
 | Name | Args | Returns |
 | --- | --- | --- |
-| `search_corpus` | `query`, `source_filter?`, `match_count?` | Top semantic matches across transcripts, products, packs, surveys, and the ultralight Bible. |
+| `search_corpus` | `query`, `source_filter?`, `match_count?` | Top semantic matches across transcripts, products, packs, surveys, and the curated gear knowledge base. |
 | `get_gear_reviews` | `product_id` | Up to 10 verified creator mentions with `youtube_url`, `timestamp_seconds`, and `snippet`. |
-| `get_product_specs` | `product_id` or `slug` | Name, brand, category, verified weight (g & oz), MSRP, image, cottage-first affiliate buy URL. |
-| `recommend_gear` | `query`, `weight_cap_oz?`, `category?`, `limit?` | Catalog recommendations sorted by relevance with verified weights and cottage-first affiliate URLs. |
+| `get_product_specs` | `product_id` or `slug` | Name, brand, category, verified weight (g & oz), MSRP, image, buy URL. |
+| `recommend_gear` | `query`, `weight_cap_oz?`, `category?`, `limit?` | Catalog recommendations sorted by relevance with verified weights and buy links. |
 | `compare_gear` | `product_ids[]` (2–6) | Side-by-side: name, brand, category, weight, MSRP, buy URL. |
 | `find_lighter_alternative` | `product_id`, `limit?` | Up to 10 lighter same-category candidates sorted by weight, with `weight_savings_g`. |
 | `get_pack_template` | `template_id` or `slug` | Full item list for one of the 21 in-house pack templates. |
