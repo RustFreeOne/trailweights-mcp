@@ -36,7 +36,6 @@ Rate-limit headers (`x-ratelimit-limit`, `x-ratelimit-remaining`,
 | Name | Args | Returns |
 | --- | --- | --- |
 | `search_corpus` | `query`, `source_filter?`, `match_count?` | Top semantic matches across creator transcripts, products, packs, surveys, and the curated gear knowledge base. |
-| `search_corpus_chunks` | `query`, `match_count?` | Raw corpus chunks for a query — the citation-grade layer under `search_corpus`. |
 | `get_product_specs` | `product_id` or `slug` | Name, brand, category, verified weight (g & oz), price, image, buy URL. |
 | `recommend_gear` | `query`, `weight_cap_oz?`, `category?`, `limit?` | Deterministic recommendations with verified weights and buy links (no server-side LLM). |
 | `compare_gear` | `product_ids[]` (2–6) | Side-by-side: name, brand, category, weight, price, buy URL. |
