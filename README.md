@@ -2,7 +2,7 @@
 
 Model Context Protocol server for the TrailWeights ultralight gear corpus:
 verified product weights, canonical specs, creator video reviews with
-timestamps, pre-scored field consensus, and in-house pack templates. Built
+timestamps, and pre-scored field consensus. Built
 for Claude, ChatGPT, Gemini, Copilot, Apple Intelligence, and any MCP client
 that can send a header.
 
@@ -21,12 +21,18 @@ Protocol version **`2026-07-28`** (stateless; `2025-06-18` clients with the
 - `x-trailweights-key: <key>` — or —
 - `Authorization: Bearer <key>`
 
-Get a free key at <https://trailweights.com/mcp>: auto-issued, emailed once,
-**500 tool calls per day** (resets 00:00 UTC), 60 requests per minute. Past
-the daily cap the server answers `429` with `Retry-After`. Prepaid credit
-packs and per-call payment (x402 on Base, Stripe MPP) are listed on the same
-page; `402` responses carry the payment challenge when a key is out of
-allowance.
+Get a key at <https://trailweights.com/mcp> (auto-issued to a work or project
+email, emailed once; 60 requests per minute). Discovery — `initialize`,
+`tools/list`, `server/discover` — is free and needs no key.
+
+**Every tool call is paid, from the first one.** There is no free allowance.
+
+- One credit from a prepaid pack: $49 for 5,000 calls, $199 for 25,000.
+- Or $0.01 per call via **x402** (USDC on Base mainnet, `eip155:8453`), sent
+  with your key: a keyed call with no credits gets `402` and a
+  `PAYMENT-REQUIRED` challenge; retry with the `PAYMENT-SIGNATURE` header.
+
+Payments never replace the key — an anonymous paid call still gets `401`.
 
 Rate-limit headers (`x-ratelimit-limit`, `x-ratelimit-remaining`,
 `x-ratelimit-reset`) ride every response.
@@ -42,7 +48,6 @@ Rate-limit headers (`x-ratelimit-limit`, `x-ratelimit-remaining`,
 | `find_lighter_alternative` | `product_id`, `limit?` | Lighter same-category candidates sorted by verified weight, with `weight_savings_g`. |
 | `get_gear_reviews` | `product_id` | Up to 10 verified creator mentions with `youtube_url`, `timestamp_seconds`, and `snippet`. |
 | `get_field_consensus` | `product_id` or `slug` | What independent creators and the field agree on, scored on a deterministic 100-point rubric with a source-diversity gate. |
-| `get_pack_template` | `template_id` or `slug` | Full item list for one of the in-house pack templates. |
 | `report_outcome` | `request_id`, `answer_used?`, `citation_included?`, `helpfulness?` | Tell TrailWeights whether a prior result was used or cited. Telemetry only. |
 
 Every tool result carries a TrailWeights `request_id`
