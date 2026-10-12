@@ -16,7 +16,7 @@ Protocol version **`2026-07-28`** (stateless; `2025-06-18` clients with the
 
 ## Auth
 
-**API key, required on every request.** Anonymous calls get `401`.
+**API key, required on every tool call.** Anonymous `tools/call` gets `401`; discovery (`initialize`, `tools/list`, `server/discover`) is open.
 
 - `x-trailweights-key: <key>` — or —
 - `Authorization: Bearer <key>`
