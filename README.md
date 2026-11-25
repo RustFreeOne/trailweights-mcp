@@ -8,6 +8,10 @@ that can send a header.
 
 Live status page, key request, and pricing: <https://trailweights.com/mcp>
 
+> **Status: closed until the TrailWeights app launches.** Every request
+> currently gets `503 server_closed` and no keys are issued. Everything below
+> describes the server as it runs once it reopens.
+
 ## Transport
 
 Streamable HTTP — JSON-RPC 2.0 over `POST https://trailweights.com/api/mcp`.
@@ -41,14 +45,21 @@ Rate-limit headers (`x-ratelimit-limit`, `x-ratelimit-remaining`,
 
 | Name | Args | Returns |
 | --- | --- | --- |
-| `search_corpus` | `query`, `source_filter?`, `match_count?` | Top semantic matches across creator transcripts, products, packs, surveys, and the curated gear knowledge base. |
-| `get_product_specs` | `product_id` or `slug` | Name, brand, category, verified weight (g & oz), price, image, buy URL. |
-| `recommend_gear` | `query`, `weight_cap_oz?`, `category?`, `limit?` | Deterministic recommendations with verified weights and buy links (no server-side LLM). |
-| `compare_gear` | `product_ids[]` (2–6) | Side-by-side: name, brand, category, weight, price, buy URL. |
-| `find_lighter_alternative` | `product_id`, `limit?` | Lighter same-category candidates sorted by verified weight, with `weight_savings_g`. |
-| `get_gear_reviews` | `product_id` | Up to 10 verified creator mentions with `youtube_url`, `timestamp_seconds`, and `snippet`. |
-| `get_field_consensus` | `product_id` or `slug` | What independent creators and the field agree on, scored on a deterministic 100-point rubric with a source-diversity gate. |
-| `report_outcome` | `request_id`, `answer_used?`, `citation_included?`, `helpfulness?` | Tell TrailWeights whether a prior result was used or cited. Telemetry only. |
+| `search_corpus` | `query`, `category?`, `max_weight_g?`, `max_price_usd?`, `match_count?` (1–3) | Up to three catalog product facts with source links. No raw transcript text. |
+| `get_product_specs` | `product_id` or `slug` | Verified weight (g & oz), price, selected option, up to six specs, weight provenance, buy and page URLs. |
+| `recommend_gear` | `query`, `weight_cap_oz?`, `category?`, `limit?` (1–6) | Deterministic recommendations with verified weights and buy links (no server-side LLM). |
+| `compare_gear` | `product_ids[]` (2–6, UUIDs or slugs) | Side-by-side rows, comparable fields, and any ids not found. |
+| `find_lighter_alternative` | `product_id` or `slug`, `limit?` (1–6) | Lighter alternatives that keep the product's function, with `weight_savings_g`. |
+| `get_gear_reviews` | `product_id` or `slug` | Up to three creator mentions with `youtube_url`, `timestamp_seconds` and sentiment. |
+| `get_field_consensus` | `product_id` or `slug` | Field-consensus label, confidence, evidence count and source links. |
+| `report_outcome` | `request_id`, `answer_used?`, `citation_included?`, `helpfulness?`, `reason?`, `downstream_action?` | Tell TrailWeights whether a prior result was used or cited. Telemetry only. |
+
+Unknown arguments are rejected with a message naming the argument and the
+allowed set. A slug is the last segment of a `trailweights.com/products/`
+page URL.
+
+Every tool publishes a `title`, read-only `annotations` (`report_outcome` is
+the one write) and an `outputSchema`; results arrive as `structuredContent`.
 
 Every tool result carries a TrailWeights `request_id`
 (`_trailweights.request_id`) you can cite and later report on.
